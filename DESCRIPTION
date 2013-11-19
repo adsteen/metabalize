@@ -11,3 +11,4 @@ Collate:
     'read_mz_file.R'
     'toy_deisotope.R'
     'metabalize.R'
+    'test_toy_deisotope.R'

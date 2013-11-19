@@ -3,19 +3,19 @@
 ##' @description Reads MAVEN output. File can be .xlsx or .csv, must have a column containing mz values
 ##' @param fn Filename (including path if necessary)
 ##' @param sheetIndex If Excel sheet, the index number of the worksheet
-##' @param colNum If Excel sheet, the column number (A=1, B=2, etc.) containing the m/z values
+##' @return A data frame of whatever 
 ##' @export
 ##' 
 
-read_mz_file <- function(fn, sheetIndex=1, colNum=1) {
+read_mz_file <- function(fn="data/maven-output.csv", sheetIndex=1, col="medMz") {
   
   # Define functions to read files depending on the file extension
-  xlsx <- function(fn, sheetIndex, colNum) {
-    df <- read.xlsx(fn=fn, sheetIndex=sheetIndex)
+  xlsx <- function(fn, sheetIndex, col) {
+    df <- read.xlsx(file=fn, sheetIndex=sheetIndex)
   }
   
-  csv <- function(fn, colNum) {
-    df <- read.csv(fn=fn)
+  csv <- function(fn, colNum, ...) {
+    df <- read.csv(file=fn)
   }
   
   # Determine whether file is .csv or .xlsx - lifted directly from ggsave
@@ -25,16 +25,18 @@ read_mz_file <- function(fn, sheetIndex=1, colNum=1) {
   }
   
   # Function to choose function to open files
-  data_reader <- function(...) {
+  read_fun_picker <- function(fn) {
     pieces <- strsplit(fn, "\\.")[[1]]
     ext <- tolower(pieces[length(pieces)])
     match.fun(ext)
   }
   
-  data_reader(fn, sheetIndex, colNum)
   
-  #df <- data_reader(fn, sheetIndex, colNum)
+  #browser()
+  reader <- read_fun_picker(fn)
+  df <- reader(fn, sheetIndex, colNum)
   
-  
+  df
+  #df[ , col]
   
 }
