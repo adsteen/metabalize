@@ -7,9 +7,26 @@
 #############
 require(ggplot2)
 require(plyr)
+require(reshape2)
 
-source("R/safe_NLS_metabalize.R")
+#source("R/safe_NLS_metabalize.R")
 source("R/read_long.R")
+
+
+############
+# Read in rawa data
+###########
+
+raw <- read_MAVEN("data/140114_AET_13C_glucose_flux.csv")
+
+# OK, so this is long-format but need to calculate percent_12C
+raw_12C <- calc_12C(raw)
+
+
+
+
+
+
 
 #############
 # Read in raw data
@@ -18,7 +35,8 @@ source("R/read_long.R")
 # Assumes raw data will be in tidy .csv files, in a known directory
 # Define the path in which our data sit
 pth <- "data/glucose flux csv"
-all_data <- read_long(pth)
+#all_data <- read_long(pth)
+
 
 ### Read in data
 
