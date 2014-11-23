@@ -17,13 +17,22 @@ source("R/read_long.R")
 # Read in rawa data
 ###########
 
-raw <- read_MAVEN(data_fn="data/140114_AET_13C_glucose_flux.csv",
+raw_list <- read_MAVEN(data_fn="data/140114_AET_13C_glucose_flux.csv",
                   key_fn="data/ex_samplekey.csv")
 
-# OK, so this is long-format but need to calculate percent_12C
-raw_12C <- calc_12C(raw)
+raw <- raw_list$raw_data
 
-# Now I need to merge in the sample_key - but why not do this in read?
+# OK, so this is long-format but need to calculate percent_12C
+system.time({
+  raw_12C <- calc_12C(raw) #Hmm: relative.ion.count doesnt work, always returns 1
+}) # likr 5 seconds on my macbook air
+
+
+
+
+atp <- subset(raw_12C, compound=="ATP")
+ggplot(atp, aes())
+
 
 
 
