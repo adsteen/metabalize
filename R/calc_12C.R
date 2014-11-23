@@ -12,8 +12,8 @@ calc_12C <- function(raw_m) {
                        sum.ion.count=sum(ion.count, na.rm=TRUE), 
                        is.12C = medMz==min(medMz), 
                        relative.ion.count = ion.count/sum.ion.count)
-  message("This algorithm currently identifies 12C peaks as the minimum medMz value for each unique combination of sample and compound. I want to confirm with the chemists that is correct.")
-  
+  message("* This algorithm currently identifies 12C peaks as the minimum medMz value for each unique combination of sample and compound. I want to confirm with the chemists that is correct.")
+  message("* This calculates relative ion count (i.e., %12C) as the ion count for the 12C divided by the ion count for all isotopomers IN A SINGLE SAMPLE. I'm not sure that is correct")
   raw_ion_sum
 #   # CHeck to see if there's exactly one 12C identified 
 #   c12_check <- ddply(raw_ion_sum, c("compoundId", "sample"), summarise,

@@ -37,7 +37,7 @@ read_MAVEN <- function(data_fn, parse_col_names=FALSE, key_fn, id.cols=NULL) {
   # Remove the rows where everything is NA
   dm <- dm[!is.na(dm$ion.count), ]
   
-  #browser()
+  # Merge key with data
   d_merge <- merge(dm, key, by="sample") # There's a problem with the sample names in key
   
   list(raw_data=d_merge, exp_var=exp_var)
