@@ -17,10 +17,18 @@ source("R/read_long.R")
 # Read in rawa data
 ###########
 
-raw <- read_MAVEN("data/140114_AET_13C_glucose_flux.csv")
+raw <- read_MAVEN(data_fn="data/140114_AET_13C_glucose_flux.csv",
+                  key_fn="data/ex_samplekey.csv")
 
 # OK, so this is long-format but need to calculate percent_12C
 raw_12C <- calc_12C(raw)
+
+# Now I need to merge in the sample_key - but why not do this in read?
+
+
+
+# <Later when I make plots: facet by arbitrary number of variables with
+# as.formula(paste("~", response), nrow=length(response) or something)
 
 
 

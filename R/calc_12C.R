@@ -12,7 +12,7 @@ calc_12C <- function(raw_m) {
                        sum.ion.count=sum(ion.count, na.rm=TRUE), 
                        is.12C = medMz==min(medMz), 
                        relative.ion.count = ion.count/sum.ion.count)
-  warning("This algorithm currently identifies 12C peaks as the minimum medMz value for each unique combination of sample and compound. I want to confirm with the chemists that is correct.")
+  message("This algorithm currently identifies 12C peaks as the minimum medMz value for each unique combination of sample and compound. I want to confirm with the chemists that is correct.")
   
   raw_ion_sum
 #   # CHeck to see if there's exactly one 12C identified 
