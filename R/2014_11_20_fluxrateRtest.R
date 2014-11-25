@@ -18,7 +18,7 @@ source("R/read_long.R")
 ###########
 
 raw_list <- read_MAVEN(data_fn="data/140114_AET_13C_glucose_flux.csv",
-                  key_fn="data/ex_samplekey.csv")
+                  key_fn="data/curacao_samplekey.csv")
 
 raw <- raw_list$raw_data
 
@@ -27,11 +27,16 @@ system.time({
   raw_12C <- calc_12C(raw) #Hmm: relative.ion.count doesnt work, always returns 1
 }) # likr 5 seconds on my macbook air
 
+hist(raw_12C$relative.ion.count)
 
+# Pick out just the 12C parts
+C12_only <- subset(raw_12C, is.12C==TRUE)
 
+# Make a plot of %C
+p_timecourse <- plot_timecourse(C12_only, exp_var=raw_list$exp_var)
 
-atp <- subset(raw_12C, compound=="ATP")
-ggplot(atp, aes())
+atp <- subset(C12, compound=="ATP")
+ggplot(raw_12C), aes(x=time, y=relative.ion.count))
 
 
 
