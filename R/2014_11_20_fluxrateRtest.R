@@ -11,6 +11,8 @@ require(reshape2)
 
 #source("R/safe_NLS_metabalize.R")
 source("R/read_long.R")
+source("R/read_MAVEN.R")
+source("R/calc_12C.R")
 
 
 ############
@@ -28,6 +30,12 @@ system.time({
 }) # likr 5 seconds on my macbook air
 
 hist(raw_12C$relative.ion.count)
+## Calc number of peaks for each metabolite
+n_peaks <- ddply(raw_12C, c("sample", "compound"), summarise,
+                 n.peaks=length(medMz))
+
+
+
 
 # Pick out just the 12C parts
 C12_only <- subset(raw_12C, is.12C==TRUE)
