@@ -2,9 +2,12 @@
 ##' 
 ##' Right now used only by plot_timecourse.R
 ##' 
-facet_expression <- function(exp_var_short) {
-  
-  facet_wrap(as.formula(paste(do.call(paste, c(as.list(exp_var_short), sep="+")))))
-
-  
+##' 
+# Could include an option to generate facet_grid if a vertical variable is given
+generate_facet_formula <- function(exp_var_short) {
+  form_text <- paste("~", do.call(paste, c(as.list(exp_var_short), sep="+")))
+  facet_wrap(as.formula(form_text))
 }
+ggplot(mtcars, aes(x=disp, y=mpg)) + 
+  geom_point() +
+  generate_facet_formula("carb")
