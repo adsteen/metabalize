@@ -17,6 +17,7 @@ generate_exp_guess <- function(x, y) {
   A_guess <- exp(coef(lin.mod)[1])
   k_guess <- coef(lin.mod)[2]
   
+  
   # Return vector of guesses
   list("A" = A_guess, "k" = k_guess)
   

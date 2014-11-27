@@ -3,6 +3,9 @@
 
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   
+  mod <- formula(I(relative.ion.count ~ A * exp(k*time)))
+  
+  
   ########
   # Test arguments
   ########
@@ -19,7 +22,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
     stop("df must be a data frame, but the object you have passed is something else.")
   }
   
-  browser()
+  #browser()
   
   # Turn xvar and yvar into vectors
   xvals <- df[ , xvar]
