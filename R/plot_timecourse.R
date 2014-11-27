@@ -20,7 +20,7 @@ plot_timecourse <- function(df,
   
   # Convert replicate variable into a factor
   df[ , rep.var] <- as.factor(df[ , rep.var])
-  #browser()
+#)
   
   # Remove replicate variable from exp_var, if it is in there
   # Possible cases:
