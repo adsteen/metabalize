@@ -39,9 +39,12 @@ n_peaks <- ddply(raw_12C, c("sample", "compound"), summarise,
 
 # Pick out just the 12C parts
 C12_only <- subset(raw_12C, is.12C==TRUE)
+few_metab <- subset(C12_only, compound %in% unique(C12_only$compound)[1:3])
+
+# Fit exponential curves
+exp_fits <- fit_exp(few_metab)
 
 # Make a plot of %C
-few_metab <- subset(C12_only, compound %in% unique(C12_only$compound)[1:3])
 p_timecourse <- plot_timecourse(few_metab, exp_var=raw_list$exp_var)
 print(p_timecourse) # Generates a plot, but there's a problem with teh talk
 ggsave("test.png", height=30, width=5, units="in", type="cairo", dpi=150)
