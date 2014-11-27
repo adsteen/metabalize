@@ -41,7 +41,10 @@ n_peaks <- ddply(raw_12C, c("sample", "compound"), summarise,
 C12_only <- subset(raw_12C, is.12C==TRUE)
 
 # Make a plot of %C
+few_metab <- subset(C12_only, compound %in% unique(C12_only$compound)[1:3])
 p_timecourse <- plot_timecourse(C12_only, exp_var=raw_list$exp_var)
+print(p_timecourse) # Generates a plot, but there's a problem with teh talk
+
 
 atp <- subset(C12, compound=="ATP")
 ggplot(raw_12C), aes(x=time, y=relative.ion.count))
