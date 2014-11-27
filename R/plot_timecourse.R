@@ -18,6 +18,11 @@ plot_timecourse <- function(df,
     stop(paste("exp_var, the vector of experimental variables, does not contain ", x.var, ", which is listed as the x variable.", sep=""))
   }
   
+  # Convert replicate variable into a factor
+  df[ , rep.var] <- as.factor(df[ , rep.var])
+  #browser()
+  
+  # Remove replicate variable from exp_var, if it is in there
   # Possible cases:
   # # NOTE: exp_var MUST exist, because this only works if there is an x variable with which to plot
   exp_var_short <- exp_var[-which(exp_var %in% x.var)]
@@ -46,7 +51,11 @@ plot_timecourse <- function(df,
   }
   
   # 4. exp_var contains x.var and replicate and one or more other values
-  if(length(exp_var > 2) & rep.var %in% exp_var) {
+
+
+if(length(exp_var > 2) & rep.var %in% exp_var) {
+  # Remove replicate from exp_var_short so it doesn't show up in the faceting
+  exp_var_short <- exp_var_short[-which(exp_var_short %in% rep.var)]
     p <- ggplot(df, aes_string(x=x.var, y=y.var, colour=rep.var)) + 
       geom_point() + 
       generate_facet_formula(exp_var_short)
