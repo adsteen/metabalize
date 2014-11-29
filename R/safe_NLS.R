@@ -3,7 +3,7 @@
 
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   
-  mod <- formula(I(relative.ion.count ~ A * exp(k*time)))
+  form <- formula(I(relative.ion.count ~ A * exp(k*time)))
   
   
   ########
@@ -28,10 +28,17 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   xvals <- df[ , xvar]
   yvals <- df[ , yvar]
   
+  # Generate guesses for exponential fits
   guesses <- generate_exp_guess(xvals, yvals)
   
-  mod <- tryCatch(
-    nls(mod, df, start=guesses),
+  # Determine domain for predictions
+  dom <- c(min(xvals), max(xvals))
+  
+  mod <- tryCatch({
+    mod <- nls(form, df, start=guesses)
+    #pred <- safe_NLS_pred(mod, domain=dom)
+    #list(mod=mod, pred=pred)
+    },
     # Note: on warning, the function executes and the warning is issued
     error=function(err) {
       warning("This model threw an error")

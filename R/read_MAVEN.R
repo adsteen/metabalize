@@ -13,7 +13,7 @@ read_MAVEN <- function(data_fn, parse_col_names=FALSE, key_fn, id.cols=NULL) {
     }
     key <- read.csv(key_fn)
   }
-  
+  #browser()
   # Determine experimental variables
   exp_var <- names(key)[2:length(names(key))] # experimental variables are everything in the sample key except the key name
   #### Right now I don't do anything with the experimental variables - maybe I need to export them somehow?
