@@ -5,6 +5,7 @@
 ##' 
 # Could include an option to generate facet_grid if a vertical variable is given
 generate_facet_formula <- function(exp_var_short, vert.var="compound") {
+  browser()
   form_text <- paste(vert.var, "~", do.call(paste, c(as.list(exp_var_short), sep="+")))
   facet_grid(as.formula(form_text))
 }
