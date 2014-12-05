@@ -13,6 +13,10 @@ require(reshape2)
 source("R/read_long.R")
 source("R/read_MAVEN.R")
 source("R/calc_12C.R")
+source("R/safe_NLS.R")
+source("R/safe_NLS_pred.R")
+source("R/generate_exp_guess.R")
+source("R/generate_facet_formula.R")
 
 
 ############
@@ -23,28 +27,63 @@ raw_list <- read_MAVEN(data_fn="data/140114_AET_13C_glucose_flux.csv",
                   key_fn="data/curacao_samplekey.csv")
 
 raw <- raw_list$raw_data
+exp_var <- raw_list$exp_var
+
+# Convert replicate variable into factor - not sure how
+raw$replicate <- as.factor(raw$replicate)
 
 # OK, so this is long-format but need to calculate percent_12C
 system.time({
-  raw_12C <- calc_12C(raw) #Hmm: relative.ion.count doesnt work, always returns 1
+  raw_12C <- calc_12C(raw) 
 }) # likr 5 seconds on my macbook air
 
-hist(raw_12C$relative.ion.count)
+hist(raw_12C$relative.ion.count) # Returns NA when the ion.count is 0 - why is this?
 ## Calc number of peaks for each metabolite
 n_peaks <- ddply(raw_12C, c("sample", "compound"), summarise,
                  n.peaks=length(medMz))
 
 
-
-
 # Pick out just the 12C parts
 C12_only <- subset(raw_12C, is.12C==TRUE)
+
+###############
+# Test fitting and plotting on just one sample type/metabolite
+###############
+
+# Pull out NAD, sample type == "HBBD"
+NAD <- subset(C12_only, compound=="NAD+"  & sample.type=="HBBD")
+
+# Fit exponential curve to NAD (3 reps)
+NAD_fits <- safe_NLS(NAD)
+
+# Define the domain for the exponential predictions
+dom <- c(min(raw_12C$time), max(raw_12C$time))
+
+# Make the predictions
+NAD_pred <- safe_NLS_pred(NAD_fits, dom)
+
+# Make the plot
+
+p_NAD <- plot_timecourse(df=NAD, exp.var=raw_list$exp_var, exp_pred=NAD_pred, treat.var="sample.type")
+print(p_NAD)
+
+
+
+
 few_metab <- subset(C12_only, compound %in% unique(C12_only$compound)[1:3])
 
+
+
 # Fit exponential curves
-exp_fits <- fit_exp(few_metab)
+
+
+
+
+
 
 # Make a plot of %C
+print(plot_timecourse(few_metab, exp_var=raw_list$exp_var))
+
 p_timecourse <- plot_timecourse(few_metab, exp_var=raw_list$exp_var)
 print(p_timecourse) # Generates a plot, but there's a problem with teh talk
 ggsave("test.png", height=30, width=5, units="in", type="cairo", dpi=150)

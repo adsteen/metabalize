@@ -1,6 +1,6 @@
 ##' Plot timecourses
 ##' Contains a nested if statement that is FROM THE DEVIL
-plot_timecourse <- function(df, 
+plot_timecourseOLD <- function(df, 
                             exp.var, 
                             x.var="time", 
                             y.var="relative.ion.count", 
