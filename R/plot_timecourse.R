@@ -72,7 +72,13 @@ plot_timecourse <- function(df,
         geom_line(data=exp_pred, aes_string(x=x.var, y=y.var))
     }
   }
+
+
+  # Bring y axis down to zero
+  p <- p + expand_limits(y=0)
   
+
+
   # Return the plot
   p
 }
