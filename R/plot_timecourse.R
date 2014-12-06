@@ -6,7 +6,7 @@ plot_timecourse <- function(df,
                             rep.var="replicate",
                             color.by="sample.type", #in general this should be "treatment"
                             ignore.reps=TRUE,
-                            exp_pred, 
+                            exp_pred=NULL, 
                             print.plot=TRUE, save.plot=FALSE, fn, ...) {
   
   

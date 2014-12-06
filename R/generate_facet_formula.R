@@ -5,7 +5,7 @@
 ##' 
 # Could include an option to generate facet_grid if a vertical variable is given
 generate_facet_formula <- function(exp.var.short, vert.var="compound", omit=NULL, facet="grid") {
-
+  browser()
   # Drop variables from exp.var.short
   if(!is.null(omit)) {
     # Test that omit is a character vector
@@ -16,10 +16,10 @@ generate_facet_formula <- function(exp.var.short, vert.var="compound", omit=NULL
     exp.var.short <- exp.var.short[-which(omit %in% exp.var.short)]
   }
   #browser()
-  # Case 1: Exp.var.short is empty
-  
+  # Case 1: Exp.var.short is empty. We still want to facet by vert.var, I believe
+  browser()
   if(length(exp.var.short) == 0) {
-    return(NULL)
+    return.null <- TRUE
   }
   
   if(length(exp.var.short) == 1) {
@@ -40,7 +40,16 @@ generate_facet_formula <- function(exp.var.short, vert.var="compound", omit=NULL
   } else {
     f <- facet_wrap(as.formula(form_text))
   }
+  browser()
   
-  f
+  # Trying to prevent multiple outcomes
+  if(return.null) { 
+    f <- NULL
+  }
+  
+  #######
+  # KLUGE TO MAKE IT WORK FOR NOW
+  #####
+  f <- facet_wrap(as.formula("compound ~ treatment"))
 }
 
