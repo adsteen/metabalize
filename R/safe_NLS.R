@@ -2,13 +2,25 @@
 # To do: import model as a parameter
 
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
-  
+  #browser()
   form <- formula(I(relative.ion.count ~ A * exp(k*time)))
+  
   
   
   ########
   # Test arguments
   ########
+  
+  
+  ## KLUGE-Y FIX for the situation in which the df is too short to fit an nls
+  ## GOTTA DO BETTER AT SOME POINT
+  # test whether there are at least two valid points
+  valid_df <- df[!is.na(df[ , xvar]) & !is.na(df[ , yvar]), ]
+  if(nrow(valid_df) < 2) {
+    # Return null if the data frame doesn't have two valid points
+    return(NULL)
+  }
+  
   
   if(is.data.frame(df)) {
     # Test for the presence of xvar and yvar in df
@@ -21,8 +33,6 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   } else {
     stop("df must be a data frame, but the object you have passed is something else.")
   }
-  
-  #browser()
   
   # Turn xvar and yvar into vectors
   xvals <- df[ , xvar]
