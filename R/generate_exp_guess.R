@@ -3,6 +3,16 @@
 ##' Fits a linear least-squares fit to log-transformed exponential data
 generate_exp_guess <- function(x, y) {
   
+  # Strip down x and y to only values that you can take a log of
+  bad.y <- (y <= 0) | (is.na(y)) | is.infinite(y)
+  y <- y[!bad.y]
+  x <- x[!bad.y]
+  
+  if(length(x) < 2) {
+    return(NA)
+  } 
+  
+  # Take log values
   log.y <- log(y)
   
   # Create linear model of log-transformed data
