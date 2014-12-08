@@ -40,6 +40,9 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   
   # Generate guesses for exponential fits
   guesses <- generate_exp_guess(xvals, yvals)
+  if(is.na(guesses)) {
+    return(NULL)
+  }
   
   # Determine domain for predictions
   dom <- c(min(xvals), max(xvals))
@@ -54,7 +57,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
       warning("This model threw an error")
       NULL
       })
-  
+  #browser()
   mod
 }
 

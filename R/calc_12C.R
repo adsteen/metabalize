@@ -8,7 +8,7 @@ calc_12C <- function(raw_m) {
   #browser()
   # Add a column for the sum of all ion counts for that compound
   ### Damn that's slow - shold rewrite in dplyr
-  raw_ion_sum <- ddply(raw_m, c("compound", "treatment", "replicate", "sample.type", "time"), mutate, 
+  raw_ion_sum <- ddply(raw_m, c("sample", "compound", "treatment", "replicate", "sample.type", "time"), mutate, 
                        sum.ion.count=sum(ion.count, na.rm=TRUE), 
                        is.12C = medMz==min(medMz), 
                        relative.ion.count = ion.count/sum.ion.count)
