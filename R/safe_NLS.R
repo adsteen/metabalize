@@ -1,8 +1,12 @@
-# Calculate NLS & return
-# To do: import model as a parameter
+##' Calculates exponential models safely
+##' 
+##' @param df A data frame
+##' @param xvar The x variable for the exponential model
+##' @param yvar The y variable for the exponential model
+##' @export
 
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
-  #browser()
+  # To do: import model as a parameter
   form <- formula(I(relative.ion.count ~ A * exp(k*time)))
   
   
@@ -18,7 +22,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   valid_df <- df[!is.na(df[ , xvar]) & !is.na(df[ , yvar]), ]
   if(nrow(valid_df) < 2) {
     # Return null if the data frame doesn't have two valid points
-    return(NULL)
+    return(NA)
   }
   
   
@@ -41,7 +45,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   # Generate guesses for exponential fits
   guesses <- generate_exp_guess(xvals, yvals)
   if(is.na(guesses)) {
-    return(NULL)
+    return(NA)
   }
   
   # Determine domain for predictions
@@ -55,7 +59,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
     # Note: on warning, the function executes and the warning is issued
     error=function(err) {
       warning("This model threw an error")
-      NULL
+      NA
       })
   #browser()
   mod
