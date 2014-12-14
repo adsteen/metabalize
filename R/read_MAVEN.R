@@ -1,5 +1,10 @@
 ##' Read raw-ish MAVEN output
 ##' 
+##' @param data_fn Filename (including path) of the data file
+##' @param parse_col_names Not yet implemented
+##' @param key_fn Filename (including path) of the key file
+##' @param id.cols I can't remember what this does
+##' @export
 read_MAVEN <- function(data_fn, parse_col_names=FALSE, key_fn, id.cols=NULL) {
   d <- read.csv(data_fn)
   

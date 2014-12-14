@@ -1,9 +1,12 @@
 ##' Generates expressions for facets
 ##' 
 ##' Right now used only by plot_timecourse.R
-##' 
-##' 
-# Could include an option to generate facet_grid if a vertical variable is given
+##' @param exp.var.short Character vector of the names of the experimental variables. Currently there is some ambiguity about whether the time variable should be included in exp.var
+##' @param vert.var Variable used for the vertical component of the facet #Describe this more clearly
+##' @param omit Variables to remove
+##' @param facet Type of facetting. "grid" or "wrap". Only grid is currently implemented.
+##' @export
+
 generate_facet_formula <- function(exp.var.short, vert.var="compound", omit=NULL, facet="grid") {
 #   #browser()
 #   # Drop variables from exp.var.short

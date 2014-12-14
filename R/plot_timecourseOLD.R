@@ -1,5 +1,5 @@
-##' Plot timecourses
-##' Contains a nested if statement that is FROM THE DEVIL
+##' Now deprecated
+##' 
 plot_timecourseOLD <- function(df, 
                             exp.var, 
                             x.var="time", 

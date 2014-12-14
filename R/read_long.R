@@ -1,5 +1,7 @@
-##' Reads long data
+##' Reads all .csv files in a directory
 ##' 
+##' @param data.path Path
+##' @export 
 read_long <- function(data.path) {
   #browser()
   # Determine all the .csv files in the relevant directory

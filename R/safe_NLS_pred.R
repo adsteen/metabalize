@@ -2,7 +2,7 @@
 ##' 
 ##' @param mod is a nls model (or any object for which there is a predict method)
 ##' @param domain of the data, as a two-element vector
-##' 
+##' @export
 safe_NLS_pred <- function(mod, domain) {
   
   

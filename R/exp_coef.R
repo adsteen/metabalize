@@ -1,5 +1,7 @@
 ##' Returns parameters of an exponential model
-##' Right now only works with two-factor exponential models
+##' @description Right now only works with two-factor exponential models
+##' @param mod An nls model. Right now should be an exponential model of the form y=Ae^(kx)
+##' @export
 exp_coef <- function(mod) {
   
   # Check whether model is an nls model

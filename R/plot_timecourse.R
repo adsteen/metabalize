@@ -1,3 +1,18 @@
+##' Plots timecourses
+##' 
+##' @param df data frame (of what)?
+##' @param exp.var character vector of experimental variables
+##' @param x.var The x variable for the plot, usually time
+##' @param yvar The y variable for the plot, usually relative ion count
+##' @param rep.var The variable encoding replicates
+##' @param color.by The variable by which to color the data. Usually treatment
+##' @param ingnore.reps Whether to ignore replicates as a vairable with which to separate the data
+##' @param exp_pred Data frame of exponential fit lines
+##' @param print.plot CURRENTLY NOT IMPLEMENTED Whether to print the plot to screen. May not work outside of Rstudio
+##' @param save.plot CURRENTLY NOT IMPLEMENTED Whether to save the plot.
+##' @param plot.fn CURRENTLY NOT IMPLEMENTED Filename with which to save the plot
+##' @export
+
 plot_timecourse <- function(df, 
                             exp.var, 
                             x.var="time", 
@@ -7,7 +22,7 @@ plot_timecourse <- function(df,
                             color.by="sample.type", #in general this should be "treatment"
                             ignore.reps=TRUE,
                             exp_pred=NULL, 
-                            print.plot=TRUE, save.plot=FALSE, fn, ...) {
+                            print.plot=TRUE, save.plot=FALSE, plot.fn, ...) {
   
   
   # Test for missing exp.var

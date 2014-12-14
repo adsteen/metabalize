@@ -1,5 +1,6 @@
 ##' Identify the 12C peak for a compound and calculate its percentage vs all ions
-##' 
+##' @param raw_m Raw data in melted form
+##' @export
 calc_12C <- function(raw_m) {
   
   # raw_m is melted raw output - tested with un-key-merged MAVEN output

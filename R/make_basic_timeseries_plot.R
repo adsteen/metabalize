@@ -1,6 +1,8 @@
 ##' Make basic timeseries plot
 ##' 
-##' Function to make standardized plot of timeseries
+##' @param df Data frame 
+##' @param save.plot
+##' @export
 make_basic_timeseries_plot <- function(df, save.plot=TRUE) {
   p <- ggplot(df, aes(x=Time, y=percent.12C, colour=Replicate)) + 
     geom_point() +

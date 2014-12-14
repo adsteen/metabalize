@@ -1,6 +1,9 @@
 ##' Generate guesses for A and k in exponential fit
 ##' 
-##' Fits a linear least-squares fit to log-transformed exponential data
+##' @description Fits a linear least-squares fit to log-transformed exponential data
+##' @param x vector of x values
+##' @param y vector of y values
+##' @export
 generate_exp_guess <- function(x, y) {
   
   # Strip down x and y to only values that you can take a log of
