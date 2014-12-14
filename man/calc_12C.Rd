@@ -5,6 +5,9 @@
 \usage{
 calc_12C(raw_m)
 }
+\arguments{
+\item{raw_m}{Raw data in melted form}
+}
 \description{
 Identify the 12C peak for a compound and calculate its percentage vs all ions
 }

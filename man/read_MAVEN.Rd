@@ -5,6 +5,15 @@
 \usage{
 read_MAVEN(data_fn, parse_col_names = FALSE, key_fn, id.cols = NULL)
 }
+\arguments{
+\item{data_fn}{Filename (including path) of the data file}
+
+\item{parse_col_names}{Not yet implemented}
+
+\item{key_fn}{Filename (including path) of the key file}
+
+\item{id.cols}{I can't remember what this does}
+}
 \description{
 Read raw-ish MAVEN output
 }

@@ -5,6 +5,11 @@
 \usage{
 generate_exp_guess(x, y)
 }
+\arguments{
+\item{x}{vector of x values}
+
+\item{y}{vector of y values}
+}
 \description{
 Fits a linear least-squares fit to log-transformed exponential data
 }

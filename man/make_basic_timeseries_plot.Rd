@@ -5,7 +5,12 @@
 \usage{
 make_basic_timeseries_plot(df, save.plot = TRUE)
 }
+\arguments{
+\item{df}{Data frame}
+
+\item{save.plot}{}
+}
 \description{
-Function to make standardized plot of timeseries
+Make basic timeseries plot
 }
 

@@ -3,9 +3,12 @@
 \alias{read_key}
 \title{Function to read sample key}
 \usage{
-read_key(key_fn)
+read_key(key_fn, ...)
+}
+\arguments{
+\item{key_fn}{Filename of the key}
 }
 \description{
-Function to read sample key
+Right now just simply wraps read.csv
 }
 
