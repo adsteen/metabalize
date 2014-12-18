@@ -3,10 +3,11 @@
 ##' @param mod An nls model. Right now should be an exponential model of the form y=Ae^(kx)
 ##' @export
 exp_coef <- function(mod) {
-  
+  #browser()
   # Check whether model is an nls model
   if(class(mod) != "nls") {
-    rep(NA, 5)
+    print("I rejected this case")
+    return(rep(NA, 5))
   }
   
   # Get the coefficients
