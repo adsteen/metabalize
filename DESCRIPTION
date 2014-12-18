@@ -8,6 +8,5 @@ Depends:
 License: MIT
 LazyData: true
 
-Imports: 
-	plyr
-	ggplot2
+Imports: plyr,
+    ggplot2
