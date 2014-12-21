@@ -6,7 +6,7 @@
 ##' @export
 
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
-  browser()
+  #browser()
   # To do: import model as a parameter
   form <- formula(I(relative.ion.count ~ A * exp(k*time)))
   

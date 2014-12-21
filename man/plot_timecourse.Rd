@@ -8,7 +8,7 @@ plot_timecourse(df, exp.var, x.var = "time", y.var = "relative.ion.count",
   exp_pred = NULL, print.plot = TRUE, save.plot = FALSE, plot.fn, ...)
 }
 \arguments{
-\item{df}{data frame containing %C12 data}
+\item{df}{data frame containing percent C12 data}
 
 \item{exp.var}{character vector of experimental variables}
 

@@ -9,4 +9,5 @@ License: MIT
 LazyData: true
 Imports:
     plyr,
-    ggplot2
+    ggplot2,
+    reshape2
