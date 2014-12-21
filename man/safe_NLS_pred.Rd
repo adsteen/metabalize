@@ -8,7 +8,7 @@ safe_NLS_pred(mod, domain)
 \arguments{
 \item{mod}{is a nls model (or any object for which there is a predict method)}
 
-\item{domain}{of the data, as a two-element vector}
+\item{domain}{of the data, as a two-element vector. Will project these onto a 100-element grid}
 }
 \description{
 Generates nls predictions
