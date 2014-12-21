@@ -1,6 +1,6 @@
 ##' Plots timecourses
 ##' 
-##' @param df data frame (of what)?
+##' @param df data frame containing %C12 data
 ##' @param exp.var character vector of experimental variables
 ##' @param x.var The x variable for the plot, usually time
 ##' @param yvar The y variable for the plot, usually relative ion count
