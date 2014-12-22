@@ -12,9 +12,9 @@ vignette: >
 # Introduction
 
 ```{r}
-#require(ggplot2)
-#require(plyr)
-#require(reshape2)
+library(ggplot2)
+library(plyr)
+library(reshape2)
 #require(devtools)
 #load_all
 library(metabalize)
