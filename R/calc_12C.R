@@ -3,10 +3,9 @@
 ##' @export
 calc_12C <- function(raw_m) {
   
-  # raw_m is melted raw output - tested with un-key-merged MAVEN output
-  # No, wait, I DO have to add the 
+  p <- ggplot(mtcars, aes(x=mpg, y=cyl)) + geom_point()
+  print(p)
   
-  #browser()
   # Add a column for the sum of all ion counts for that compound
   ### Damn that's slow - shold rewrite in dplyr
   raw_ion_sum <- plyr::ddply(raw_m, c("sample", "compound", "treatment", "replicate", "sample.type", "time"), mutate, 
