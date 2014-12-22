@@ -7,7 +7,7 @@ Depends:
     R (>= 3.1.1)
 License: MIT
 LazyData: true
-Depends: plyr,
+Imports: plyr,
     ggplot2,
     reshape2
 Suggests: knitr
