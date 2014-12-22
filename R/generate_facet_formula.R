@@ -53,7 +53,7 @@ generate_facet_formula <- function(exp.var.short, vert.var="compound", omit=NULL
   #######
   # KLUGE TO MAKE IT WORK FOR NOW
   #####
-  f <- facet_grid(as.formula("compound ~ treatment"))
+  f <- ggplot2::facet_grid(as.formula("compound ~ treatment"))
   #f <- facet_wrap(as.formula("compound + treatent"))
 }
 

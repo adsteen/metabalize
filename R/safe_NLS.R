@@ -22,7 +22,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   # test whether there are at least two valid points
   valid_df <- df[!is.na(df[ , xvar]) & !is.na(df[ , yvar]), ]
   if(nrow(valid_df) < 2) {
-    # Return null if the data frame doesn't have two valid points
+    # Return NA if the data frame doesn't have two valid points
     return(NA)
   }
   
@@ -45,24 +45,24 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   
   # Generate guesses for exponential fits
   guesses <- generate_exp_guess(xvals, yvals)
-  if(is.na(guesses)) {
+  #browser()
+  if(is.null(guesses)) {
     return(NA)
   }
   
   # Determine domain for predictions
   dom <- c(min(xvals), max(xvals))
   
+  # Generate a model, or return NA otherwise (should it be NULL?)
   mod <- tryCatch({
     mod <- nls(form, df, start=guesses)
-    #pred <- safe_NLS_pred(mod, domain=dom)
-    #list(mod=mod, pred=pred)
     },
     # Note: on warning, the function executes and the warning is issued
     error=function(err) {
-      warning("This model threw an error")
+      #warning("This model threw an error")
       NA
       })
-  #browser()
+
   mod
 }
 

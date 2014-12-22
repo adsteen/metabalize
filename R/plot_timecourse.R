@@ -62,14 +62,14 @@ plot_timecourse <- function(df,
   #if(length(exp.var.short==0)) {
   if(is.null(color.by)) {
     print("Case 1")  
-    p <- ggplot() + 
-      geom_point(data=df, aes_string(x=x.var, y=y.var)) + 
-      generate_facet_formula(exp.var.short)
+    p <- ggplot2::ggplot() + 
+      ggplot2::geom_point(data=df, aes_string(x=x.var, y=y.var)) + 
+      ggplot2::generate_facet_formula(exp.var.short)
   } else {
     print(paste("Case 2: facetting by ", color.by))
-    p <- ggplot() + 
-      geom_point(data=df, aes_string(x=x.var, y=y.var, colour=color.by)) + 
-      generate_facet_formula(exp.var.short, omit=rep.var)
+    p <- ggplot2::ggplot() + 
+      ggplot2::geom_point(data=df, aes_string(x=x.var, y=y.var, colour=color.by)) + 
+      ggplot2::generate_facet_formula(exp.var.short, omit=rep.var)
   }
   
   
@@ -81,16 +81,16 @@ plot_timecourse <- function(df,
   if(!is.null(exp_pred)) {
     if(color.by %in% names(exp_pred)) {
       p <- p + 
-        geom_line(data=exp_pred, aes_string(x=x.var, y=y.var, colour=color.by))
+        ggplot2::geom_line(data=exp_pred, aes_string(x=x.var, y=y.var, colour=color.by))
     } else {
       p <- p + 
-        geom_line(data=exp_pred, aes_string(x=x.var, y=y.var))
+        ggplot2::geom_line(data=exp_pred, aes_string(x=x.var, y=y.var))
     }
   }
 
 
   # Bring y axis down to zero
-  p <- p + expand_limits(y=0)
+  p <- p + ggplot2::expand_limits(y=0)
   
 
 

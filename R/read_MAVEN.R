@@ -37,7 +37,7 @@ read_MAVEN <- function(data_fn, parse_col_names=FALSE, key_fn, id.cols=NULL) {
   }
   
   # Melt the data frame
-  dm <- melt(d, id.vars=id.cols, variable.name="sample", value.name="ion.count")
+  dm <- reshape2::melt(d, id.vars=id.cols, variable.name="sample", value.name="ion.count")
   
   # Remove the rows where everything is NA
   dm <- dm[!is.na(dm$ion.count), ]

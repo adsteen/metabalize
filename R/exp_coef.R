@@ -6,7 +6,7 @@ exp_coef <- function(mod) {
   #browser()
   # Check whether model is an nls model
   if(class(mod) != "nls") {
-    print("I rejected this case")
+    #print("I rejected this case")
     return(rep(NA, 5))
   }
   

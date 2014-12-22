@@ -13,4 +13,7 @@ generate_exp_guess(x, y)
 \description{
 Fits a linear least-squares fit to log-transformed exponential data
 }
+\details{
+When this fails, it is a good sign that the data don't fit an exponential model. Often this would be either because there are too few data points (1 or 0) or some of the data points are negative. In that case, the function returns NULL. (Although I'm not convinced that is the optimal return value).
+}
 
