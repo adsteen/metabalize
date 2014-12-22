@@ -7,8 +7,9 @@ Depends:
     R (>= 3.1.1)
 License: MIT
 LazyData: true
-Imports: plyr,
-    ggplot2,
-    reshape2
+Imports:
+    plyr (>= 1.7.1),
+    reshape2,
+    ggplot2
 Suggests: knitr
 VignetteBuilder: knitr
