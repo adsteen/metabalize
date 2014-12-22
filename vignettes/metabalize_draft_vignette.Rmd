@@ -9,10 +9,14 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
+# Introduction
+
 ```{r}
-require(ggplot2)
-require(plyr)
-require(reshape2)
+#require(ggplot2)
+#require(plyr)
+#require(reshape2)
+#require(devtools)
+load_all()
 
 raw_list <- read_MAVEN(data_fn="../data/140114_AET_13C_glucose_flux.csv",
                   key_fn="../data/curacao_samplekey.csv")
@@ -33,7 +37,7 @@ raw$replicate <- as.factor(raw$replicate)
 # calc_12C identifies 12C ions
 system.time({
   raw_12C <- calc_12C(raw) 
-}) # like 5 seconds on my macbook air
+}) # about 6 seconds on my macbook air
 
 # Filter 12C peaks from 13C-containing peaks
 C12_only <- subset(raw_12C, is.12C==TRUE)
@@ -42,22 +46,16 @@ C12_only <- subset(raw_12C, is.12C==TRUE)
 # Fit exp models to each unique sample, metabolite, treatment & sample.type
 ################
 
-# # Determine the number of timepoints for each sample, compound, treatment, replicate and sample type
-# n_timepoints <- ddply(C12_only, c("compound", "treatment", "replicate", "sample.type"), 
-#                      summarise,
-#                      n_tp=length(time))
-# 
-# # Actually create a model for each sample, compound, treatement, replicate and sample type
-
 min_for_debugging <- C12_only[ , c("compound", "treatment", "sample.type", "time", "relative.ion.count")]
 system.time({ # This throws an error - I don't know why
   nls_fits <- dlply(min_for_debugging, #C12_only,
                     c("compound", "treatment", "sample.type"), safe_NLS, .inform=TRUE)
-}) # ~4 seconds on my laptop, not so bad
+}) # ~1.4 seconds on my laptop, not so bad
 
-# How many of these are good?
-bad_fits <- ldply(nls_fits, is.null)
-sum(bad_fits$V1)/nrow(bad_fits) #Now none seem to be bad
+# Note that in some cases, no model was created. 
+# How many bad models were created?
+bad_fits <- ldply(nls_fits, anyNA)
+sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an exponential model
 ```
 
 
