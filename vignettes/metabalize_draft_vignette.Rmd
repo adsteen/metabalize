@@ -10,6 +10,7 @@ vignette: >
 ---
 
 # Introduction
+This document shows (currently in a very rough way) how to run `metabalize` to calculate exponential fits for flux data.
 
 ```{r}
 library(ggplot2)
@@ -35,7 +36,7 @@ raw$replicate <- as.factor(raw$replicate)
 # Create data frame of only 12C isotopomers; expressed as fraction of total ions 
 ################
 ```
-here's a word.
+## Identify 12C isotopomers, remove all others.
 ```{r}
 # calc_12C identifies 12C ions
 system.time({
@@ -45,95 +46,48 @@ system.time({
 # Filter 12C peaks from 13C-containing peaks
 C12_only <- subset(raw_12C, is.12C==TRUE)
 ```
-
+## Fit exponential models
 ```{r}
 ################
 # Fit exp models to each unique sample, metabolite, treatment & sample.type
 ################
 
-# min_for_debugging <- C12_only[ , c("compound", "treatment", "sample.type", "time", "relative.ion.count")]
-# system.time({ # This throws an error - I don't know why
-#   nls_fits <- dlply(min_for_debugging, #C12_only,
-#                     c("compound", "treatment", "sample.type"), safe_NLS, .inform=TRUE)
-# }) # ~1.4 seconds on my laptop, not so bad
-# 
-# # Note that in some cases, no model was created. 
-# # How many bad models were created?
-# bad_fits <- ldply(nls_fits, anyNA)
-# sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an exponential model
+min_for_debugging <- C12_only[ , c("compound", "treatment", "sample.type", "time", "relative.ion.count")]
+system.time({ # This throws an error - I don't know why
+  nls_fits <- dlply(min_for_debugging, #C12_only,
+                    c("compound", "treatment", "sample.type"), safe_NLS, .inform=TRUE)
+}) # ~1.4 seconds on my laptop, not so bad
+
+# Note that in some cases, no model was created. 
+# How many bad models were created?
+bad_fits <- ldply(nls_fits, anyNA)
+sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an exponential model
 ```
 
 
 # Getting the data out
 ```{r}
-# # Get the nls coefficients out
-# all_coefs <- ldply(nls_fits, function(x) exp_coef(x))
-# print(all_coefs)
-# 
-# # How many of the A values are good?
-# ggplot(all_coefs, aes(x=A.est)) + 
-#   geom_density() #Many are close to zero
-# 
-# # Create predicted values for exponential fit
-# all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
-# 
-# # Plot all the data
-# ggplot() +
-#   geom_point(data=C12_only, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
-#   geom_line(data=all_preds, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
-#   facet_wrap(~compound)
-# ggsave("../testplot.png", height=20, width=20, units="in", dpi=300, type="cairo")
-# p <- plot_timecourse(C12_only, 
-#                      exp.var=c("compound", "treatment", "sample.type", "time"),
-#                      exp_pred=all_preds)
+# Get the nls coefficients out
+all_coefs <- ldply(nls_fits, function(x) exp_coef(x))
+print(all_coefs)
+
+# How many of the A values are good?
+ggplot(all_coefs, aes(x=A.est)) + 
+  geom_density() #Many are close to zero
+
+# Create predicted values for exponential fit
+all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
+
+# Plot all the data
+ggplot() +
+  geom_point(data=C12_only, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
+  geom_line(data=all_preds, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
+  facet_wrap(~compound)
+ggsave("../testplot.png", height=20, width=20, units="in", dpi=300, type="cairo")
+p <- plot_timecourse(C12_only, 
+                     exp.var=c("compound", "treatment", "sample.type", "time"),
+                     exp_pred=all_preds)
 # print(p)
 
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
-
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
-
-## Vignette Info
-
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
