@@ -23,7 +23,11 @@ plot_timecourse <- function(df,
                             ignore.reps=TRUE,
                             exp_pred=NULL, 
                             print.plot=TRUE, save.plot=FALSE, plot.fn, ...) {
+  ###########
+  # Test parameters
+  ###########
   
+  stopifnot(is.data.frame(df))
   
   # Test for missing exp.var
   if(is.null(exp.var)) {
@@ -66,10 +70,11 @@ plot_timecourse <- function(df,
       ggplot2::geom_point(data=df, aes_string(x=x.var, y=y.var)) + 
       ggplot2::generate_facet_formula(exp.var.short)
   } else {
+    #browser()
     print(paste("Case 2: facetting by ", color.by))
     p <- ggplot2::ggplot() + 
       ggplot2::geom_point(data=df, aes_string(x=x.var, y=y.var, colour=color.by)) + 
-      ggplot2::generate_facet_formula(exp.var.short, omit=rep.var)
+      generate_facet_formula(exp.var.short, omit=rep.var)
   }
   
   
