@@ -8,6 +8,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
+# Update
+This is a new version designed to test whether the vignettes are building/updating from github properly.
 
 # Introduction
 This document shows (currently in a very rough way) how to run `metabalize` to calculate exponential fits for flux data.
