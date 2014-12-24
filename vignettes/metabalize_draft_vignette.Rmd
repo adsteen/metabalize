@@ -78,16 +78,16 @@ ggplot(all_coefs, aes(x=A.est)) +
 # Create predicted values for exponential fit
 all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
 
-# Plot all the data
-ggplot() +
-  geom_point(data=C12_only, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
-  geom_line(data=all_preds, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
-  facet_wrap(~compound)
-ggsave("../testplot.png", height=20, width=20, units="in", dpi=300, type="cairo")
-p <- plot_timecourse(C12_only, 
-                     exp.var=c("compound", "treatment", "sample.type", "time"),
-                     exp_pred=all_preds)
-# print(p)
+# # Plot all the data
+# ggplot() +
+#   geom_point(data=C12_only, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
+#   geom_line(data=all_preds, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
+#   facet_wrap(~compound)
+# ggsave("../testplot.png", height=20, width=20, units="in", dpi=300, type="cairo")
+# p <- plot_timecourse(C12_only, 
+#                      exp.var=c("compound", "treatment", "sample.type", "time"),
+#                      exp_pred=all_preds)
+# # print(p)
 
 ```
 
