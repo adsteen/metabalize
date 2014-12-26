@@ -8,16 +8,47 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
-# Update
-This is a new version designed to test whether the vignettes are building/updating from github correctly.
+
+# Work-in-progress: metabalize vignette
 
 # Introduction
 This document shows (currently in a very rough way) how to run `metabalize` to calculate exponential fits for flux data.
 
+## Notes about how flux experiments work/what they're useful for
+
+_Chemistry behind metabolic flux experiments_
+
+## Notes about the philosophy behind this software
+
+_Some general observations about how to use the software_
+
+# Methods
+
+## Example: loading and processing a dataset from scratch
+
+This software can load flux data from a variety of source, using a family of functions named in the form `read_XXX`. As of now, only `read_MAVEN` (for MAVEN-format .csv files) and `read_long` (for long-format generic .csv files, grouped by metabolite) are implemented.
+
+All the `read_XXX` files share two attributes: they require a _key_ dataset as well as the MS data, and they return a [list][output_format] with two elements: a data frame containing the raw data, and a character vector (note: I am considering changing this. If we want to add this to Bioconductor, we would probably need to change this to an S4 object.)
+
+### The _key_ dataset
+The _key_ dataset serves to match the instrumental sample (i.e., the physical sample which was loaded into the instrument) to the experimental parameters required to identify it. To understand this, let's think about the design of the experiment we're using for this example. As described above, four variables are required to uniquely specify each individual sample:
+
+* labeled compound (glucose / **<<whatever else>>**)
+* sample type **<<what is this?>>**
+* incubation time
+* replicate number
+
+The _sample key_ will therefore take the form of a table with 5 columns: one column containing the sample name used for MAVEN, and one for each identifying sample. The _sample key_ below is structured as follows
+
+sample | treatment | replicate | time |sample.type
+24_154 | glucose   | 1         | 0    | BBD
+24_155 | glucose   | 1         | 0    | HBBD
+24_156 | glucose   | 1         | 0    | SML
+
 ```{r}
-library(ggplot2)
-library(plyr)
-library(reshape2)
+#library(ggplot2)
+#library(plyr)
+#library(reshape2)
 #require(devtools)
 #load_all
 library(metabalize)
@@ -29,8 +60,9 @@ raw_list <- read_MAVEN(data_fn="../data/140114_AET_13C_glucose_flux.csv",
 #    I should probably change the exp.var workflow
 raw <- raw_list$raw_data
 exp.var <- raw_list$exp.var
+```
 
-
+```{r}
 # Convert replicate variable into factor - not sure how
 raw$replicate <- as.factor(raw$replicate)
 
@@ -73,9 +105,9 @@ sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an expone
 all_coefs <- ldply(nls_fits, function(x) exp_coef(x))
 print(all_coefs)
 
-# How many of the A values are good?
-ggplot(all_coefs, aes(x=A.est)) + 
-  geom_density() #Many are close to zero
+## How many of the A values are good?
+#ggplot(all_coefs, aes(x=A.est)) + 
+#  geom_density() #Many are close to zero
 
 # Create predicted values for exponential fit
 all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
