@@ -1,5 +1,5 @@
 Package: metabalize
-Title: WUseful for analyzing stable-isotope flux metabolomics experiments
+Title: Useful for analyzing stable-isotope flux metabolomics experiments
 Version: 0.1
 Authors@R: "Andrew D. Steen <asteen1@utk.edu> [aut, cre]"
 Description: Useful for analyzing stable-isotope flux metabolomics experiments
