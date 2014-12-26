@@ -3,8 +3,8 @@
 ##' @export
 calc_12C <- function(raw_m) {
   
-  p <- ggplot(mtcars, aes(x=mpg, y=cyl)) + geom_point()
-  print(p)
+  #p <- ggplot(mtcars, aes(x=mpg, y=cyl)) + geom_point()
+  #print(p)
   
   # Add a column for the sum of all ion counts for that compound
   ### Damn that's slow - shold rewrite in dplyr
