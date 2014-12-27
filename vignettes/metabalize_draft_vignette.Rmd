@@ -121,18 +121,31 @@ This model allows the value of `relative.ion.count` to be less than 1 at t=0. **
 # Fit exp models to each unique sample, metabolite, treatment & sample.type
 ################
 
-#min_for_debugging <- C12_only[ , c("compound", "treatment", "sample.type", "time", "relative.ion.count")]
 system.time({ # This throws an error - I don't know why
-  nls_fits <- dlply(C12_only, #C12_only,
-                    c("compound", "treatment", "sample.type"), safe_NLS, .inform=TRUE)
-}) # ~1.4 seconds on my laptop, not so bad
-
-# # Note that in some cases, no model was created. 
-# # How many bad models were created?
-# bad_fits <- ldply(nls_fits, anyNA)
-# sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an exponential model
+  nls_fits <- dlply(C12_only, 
+                    c("compound", "treatment", "sample.type"), safe_NLS)
+}) # ~1.5 seconds on my laptop, not so bad
 ```
 
+In some cases, the data are such that R can't create a good exponential model. In these cases, `safe_NLS()` returns `NA` rather than an `nls` object. How many datasets are bad?
+
+```{r}
+# # How many bad models were created?
+#bad_fits <- ldply(nls_fits, anyNA)
+bad_fits <- is.na(nls_fits)
+frac_bad_fits <- sum(bad_fits)/length(nls_fits) #23.4% of the cases couldn't be fit to an exponential model
+```
+
+Roughly `print(round(frac_bad_fits*100))`\% of the compounds/treatments/sample types could not be fit to an exponential value. An example of a bad one is 3-phosphoglycerate/glucose/BBD.
+
+```{r}
+example_bad <- subset(C12_only, compound=="3-phosphoglycerate" & treatment=="glucose" & sample.type=="BBD")
+p_bad <- ggplot(example_bad, aes(x=time, y=relative.ion.count)) + 
+  geom_point()
+print(p_bad)
+```
+
+Here, no label was incorporated at all. R cannot fit an exponential curve to this dataset.
 
 ### Get the data out
 
@@ -141,12 +154,11 @@ The linear fits are stored in a list, which we call in this example `nls_fits`. 
 ```{r}
 # Get the nls coefficients out
 all_coefs <- ldply(nls_fits, function(x) exp_coef(x))
-#print(all_coefs)
 ```
 
-It is not a bad idea to look at the distribution of A values: They should mostly be in the vicinity of 1. **I SUSPECT (Abigail & Shawn, check me on this)** that datasets where the A value is far from 1 are either so noisy as to be useless, or suffer from some artifiact in which the thing being measured is not actually the compound you think it is. 
+Before we get the data out, it is a good idea to do some checking.
 
-**Somewhere we need to discuss the fact that R can't manage a fit for about 25% of the datasets, for various reasons. It also returns some fits with 
+What is the distribution of A values? They should mostly be in the vicinity of 1. 
 
 ```{r}
 ## How many of the A values are close to one?
@@ -157,7 +169,12 @@ p_A <- ggplot(all_coefs, aes(x=A.est)) +
 print(p_A)
 ```
 
-Looks like there is a bimodal distribution of A values: some close to zero, some are closer to 1.
+Looks like there is a bimodal distribution of A values: some close to zero, some are closer to 1. **I SUSPECT (Abigail & Shawn, check me on this)** that datasets where the A value is far from 1 are either so noisy as to be useless, or suffer from some artifiact in which the thing being measured is not actually the compound you think it is. 
+
+### Save the fit parameters to a .csv file
+```{r}
+# write.csv(all_coefs, "data/curacao_fits.csv")
+```
 
 ### Make plots
 
@@ -166,6 +183,13 @@ We'd like to make timecourse plots including fit lines for each compound, treatm
 ```{r}
 # Create predicted values for exponential fit
 all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
-
 ```
 
+Then we can use the **metabalize** function `plot_timecourse()` to make plots of all of the data
+
+```{r}
+p_all_timecourse <- plot_timecourse(df=C12_only,
+                                    exp.var=exp.var,
+                                    exp_pred=all_preds)
+print(p_all_timecourse)
+```
