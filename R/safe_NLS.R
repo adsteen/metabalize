@@ -44,7 +44,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   
   # Generate guesses for exponential fits
   guesses <- generate_exp_guess(xvals, yvals)
-  #browser()
+  
   if(is.null(guesses)) {
     return(NA)
   }
