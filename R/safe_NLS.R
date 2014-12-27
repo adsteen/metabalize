@@ -1,16 +1,15 @@
 ##' Calculates exponential models safely
 ##' 
+##' @details **Works only if x variable is named time and y variable is named relative.ion.count**. THis is because of the way generate_exp_guess works, must fix.
 ##' @param df A data frame
 ##' @param xvar The x variable for the exponential model
 ##' @param yvar The y variable for the exponential model
 ##' @export
 
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
-  #browser()
+  
   # To do: import model as a parameter
   form <- formula(I(relative.ion.count ~ A * exp(-1*k*time)))
-  
-  
   
   ########
   # Test arguments
