@@ -8,7 +8,7 @@
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   #browser()
   # To do: import model as a parameter
-  form <- formula(I(relative.ion.count ~ A * exp(k*time)))
+  form <- formula(I(relative.ion.count ~ A * exp(-1*k*time)))
   
   
   
