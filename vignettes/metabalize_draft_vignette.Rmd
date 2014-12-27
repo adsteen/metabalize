@@ -2,17 +2,17 @@
 title: "Using metabalize"
 author: "Andrew D. Steen"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Using metabalize}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
 
-# Work-in-progress: metabalize vignette
+rmarkdown::html_vignette
 
 # Introduction
-This document shows (currently in a very rough way) how to run `metabalize` to calculate exponential fits for flux data.
+This document shows (currently in a very rough way) how to run **metabalize** to calculate exponential fits for flux data.
 
 ## Notes about how flux experiments work/what they're useful for
 
@@ -41,18 +41,31 @@ The _key_ dataset serves to match the instrumental sample (i.e., the physical sa
 The _sample key_ will therefore take the form of a table with 5 columns: one column containing the sample name used for MAVEN, and one for each identifying sample. The _sample key_ below is structured as follows
 
 sample | treatment | replicate | time |sample.type
+-------|-----------|-----------|------|-----------
 24_154 | glucose   | 1         | 0    | BBD
 24_155 | glucose   | 1         | 0    | HBBD
 24_156 | glucose   | 1         | 0    | SML
 
+This should be saved as a .csv file with  column names in the first row and a different sample on each row. The `read_XXX` function will merge the data in the _sample key_ dataset with the raw data. 
+
+### Required packages
+
+For reasons I don't fully understand, you must load the `ggplot2`, `plyr`, and `reshape2` packages in order to use this package ()
+
 ```{r}
-#library(ggplot2)
-#library(plyr)
-#library(reshape2)
+library(ggplot2)
+library(plyr)
+library(reshape2)
 #require(devtools)
 #load_all
 library(metabalize)
+```
 
+Next read the raw data into a list, and then break out the two elements of the list into their own distinct objects (again, this may change a bit). 
+
+### Read the data
+
+```{r}
 raw_list <- read_MAVEN(data_fn="../data/140114_AET_13C_glucose_flux.csv",
                   key_fn="../data/curacao_samplekey.csv")
 
@@ -62,16 +75,27 @@ raw <- raw_list$raw_data
 exp.var <- raw_list$exp.var
 ```
 
+In this example dataset, the replicates are stored as numbers (1, 2, 3) and therefore are read by R as a numeric vector. This will cause trouble when we are plotting the data, so let's go ahead and convert this to a factor. (I'd like to automate this, but I'm not sure how to do it in a user-friendly, guaranteed-to-work way).
+
 ```{r}
 # Convert replicate variable into factor - not sure how
 raw$replicate <- as.factor(raw$replicate)
+```
 
+`read_XXX` gives us a data frame in long format (that is, each individual isotopomer gets its own row). For this analysis we want to idnentify the unlabeled isotopomers using the `calc_12C()` function (there is probably a better name for this function), which adds two columns:
+
+* `relative.ion.count`, expressing the intensity of each isotopomer's peak relative to the sum of all isotopomers of that compound in that sample
+* `is.12C` for whether each row represents the lightest isotopomer of its compound and sample.
+
+Note that `calc_12C` is fairly slow - it takes about 6 seconds on my old-ish MacBook Air. (I could speed it up  by using the dplyr package rather than the plyr package.)
+
+After we identify the 12C peaks using `calc_12C`, we'll throw away the 13C-containing isotopomers using `subset`. 
+
+```{r}
 ################
 # Create data frame of only 12C isotopomers; expressed as fraction of total ions 
 ################
-```
-## Identify 12C isotopomers, remove all others.
-```{r}
+
 # calc_12C identifies 12C ions
 system.time({
   raw_12C <- calc_12C(raw) 
@@ -80,48 +104,68 @@ system.time({
 # Filter 12C peaks from 13C-containing peaks
 C12_only <- subset(raw_12C, is.12C==TRUE)
 ```
-## Fit exponential models
+
+### Fit exponential models
+Next we want to fit exponential models to the data. Note that the specific exponential model being fit is:
+
+$$
+y = Ae^(kt) + \epsilon
+$$
+
+(Hmm, this is not displaying correctly for some reason). 
+
+This model allows the value of `relative.ion.count` to be less than 1 at t=0. **There is a real question as to whether we should allow this** - that is, whether it would be more appropriate to use the model $y = e^{kt} + \epsilon$ instead of $y=Ae^{kt} + \epsilon$. Someday I'd like to implement the choice between two (or more) models, but for now I haven't done that.
+
 ```{r}
 ################
 # Fit exp models to each unique sample, metabolite, treatment & sample.type
 ################
 
-min_for_debugging <- C12_only[ , c("compound", "treatment", "sample.type", "time", "relative.ion.count")]
+#min_for_debugging <- C12_only[ , c("compound", "treatment", "sample.type", "time", "relative.ion.count")]
 system.time({ # This throws an error - I don't know why
-  nls_fits <- dlply(min_for_debugging, #C12_only,
+  nls_fits <- dlply(C12_only, #C12_only,
                     c("compound", "treatment", "sample.type"), safe_NLS, .inform=TRUE)
 }) # ~1.4 seconds on my laptop, not so bad
 
-# Note that in some cases, no model was created. 
-# How many bad models were created?
-bad_fits <- ldply(nls_fits, anyNA)
-sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an exponential model
+# # Note that in some cases, no model was created. 
+# # How many bad models were created?
+# bad_fits <- ldply(nls_fits, anyNA)
+# sum(bad_fits$V1)/nrow(bad_fits) #23.4% of the cases couldn't be fit to an exponential model
 ```
 
 
-# Getting the data out
+### Get the data out
+
+The linear fits are stored in a list, which we call in this example `nls_fits`. To get the coefficients out into a data frame, we'll use `ldply` and the **metabalize** function `exp_coef`.
+
 ```{r}
 # Get the nls coefficients out
 all_coefs <- ldply(nls_fits, function(x) exp_coef(x))
-print(all_coefs)
+#print(all_coefs)
+```
 
-## How many of the A values are good?
-#ggplot(all_coefs, aes(x=A.est)) + 
-#  geom_density() #Many are close to zero
+It is not a bad idea to look at the distribution of A values: They should mostly be in the vicinity of 1. **I SUSPECT (Abigail & Shawn, check me on this)** that datasets where the A value is far from 1 are either so noisy as to be useless, or suffer from some artifiact in which the thing being measured is not actually the compound you think it is. 
 
+**Somewhere we need to discuss the fact that R can't manage a fit for about 25% of the datasets, for various reasons. It also returns some fits with 
+
+```{r}
+## How many of the A values are close to one?
+p_A <- ggplot(all_coefs, aes(x=A.est)) + 
+  geom_histogram(binwidth=0.05) + 
+  scale_x_continuous(breaks=seq(from=0, to=1.25, by=0.25)) +
+  ggtitle("Distribution of estimated A values")
+print(p_A)
+```
+
+Looks like there is a bimodal distribution of A values: some close to zero, some are closer to 1.
+
+### Make plots
+
+We'd like to make timecourse plots including fit lines for each compound, treatment, and sample type. So, first, we'll use the **metabalize** function `safe_NLS_pred()` to create a data frame containing predicted values for each exponential fit.
+
+```{r}
 # Create predicted values for exponential fit
 all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
-
-# # Plot all the data
-# ggplot() +
-#   geom_point(data=C12_only, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
-#   geom_line(data=all_preds, aes(x=time, y=relative.ion.count, colour=sample.type)) + 
-#   facet_wrap(~compound)
-# ggsave("../testplot.png", height=20, width=20, units="in", dpi=300, type="cairo")
-# p <- plot_timecourse(C12_only, 
-#                      exp.var=c("compound", "treatment", "sample.type", "time"),
-#                      exp_pred=all_preds)
-# # print(p)
 
 ```
 
