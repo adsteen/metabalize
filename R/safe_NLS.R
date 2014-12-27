@@ -9,6 +9,7 @@
 safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   
   # To do: import model as a parameter
+  # Intermediate step
   form <- formula(I(relative.ion.count ~ A * exp(-1*k*time)))
   
   ########
@@ -43,8 +44,9 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
   yvals <- df[ , yvar]
   
   # Generate guesses for exponential fits
-  guesses <- generate_exp_guess(xvals, yvals, xvar, yvar) #This is not right
+  guesses <- generate_exp_guess(xvals, yvals) #This is not right
   
+  # Test whether generate_exp_guess failed
   if(is.null(guesses)) {
     return(NA)
   }
@@ -61,7 +63,7 @@ safe_NLS <- function(df, xvar="time", yvar="relative.ion.count") {
       #warning("This model threw an error")
       NA
       })
-
+  
   mod
 }
 
