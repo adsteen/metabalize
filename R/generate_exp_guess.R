@@ -5,7 +5,7 @@
 ##' @param x vector of x values
 ##' @param y vector of y values
 ##' @export
-generate_exp_guess <- function(x, y) {
+generate_exp_guess <- function(x, y, xvar, yvar) {
   
   # Strip down x and y to only values that you can take a log of
   bad.y <- (y <= 0) | (is.na(y)) | is.infinite(y)
@@ -43,8 +43,10 @@ generate_exp_guess <- function(x, y) {
   A_guess <- exp(coef(lin.mod)[1])
   k_guess <- coef(lin.mod)[2]
   
+  # Return properly-named list of guesses to feed to nls
+  guess_list=list(A_guess, k_guess)
+  names(guess_list)=c(xvar, yvar)
   
-  # Return vector of guesses
-  list("A" = A_guess, "k" = k_guess)
+  guess_list
   
 }
