@@ -1,4 +1,4 @@
-##' Plots timecourses
+##' plot a metabolic flux timecourse
 ##' 
 ##' @param df data frame containing percent C12 data
 ##' @param exp.var character vector of experimental variables
@@ -8,6 +8,7 @@
 ##' @param color.by The variable by which to color the data. Usually treatment
 ##' @param ingnore.reps Whether to ignore replicates as a vairable with which to separate the data
 ##' @param exp_pred Data frame of exponential fit lines
+##' @param metab.subset NOT YET IMPLEMENTED Subset of metabolites to plot. This could be a character vector of metabolites, or the name of a metabolic cycle (e.g. TCA cycle)
 ##' @param print.plot CURRENTLY NOT IMPLEMENTED Whether to print the plot to screen. May not work outside of Rstudio
 ##' @param save.plot CURRENTLY NOT IMPLEMENTED Whether to save the plot.
 ##' @param plot.fn CURRENTLY NOT IMPLEMENTED Filename with which to save the plot
@@ -20,6 +21,7 @@ plot_timecourse <- function(df,
                             #treat.var="treatment", 
                             rep.var="replicate",
                             color.by="sample.type", #in general this should be "treatment"
+                            metab.subset=NULL,
                             ignore.reps=TRUE,
                             exp_pred=NULL, 
                             print.plot=TRUE, save.plot=FALSE, plot.fn, ...) {
@@ -39,10 +41,16 @@ plot_timecourse <- function(df,
     stop(paste("exp.var, the vector of experimental variables, does not contain ", x.var, ", which is listed as the x variable.", sep=""))
   }
   
-  #########
-  # Shitty kluge
-  #########
-  # Remove "replicate" from exp.var preemptively
+  ##########
+  # Modify raw dataset per parameters
+  ##########
+  
+  # Plot only a subset of metabolites
+  if(!is.null(metab.subset)) {
+    warning("subsetting in plot_timecourse is not yet implemented")
+  }
+  
+  # Remove "replicate" from exp.var
   if(ignore.reps) {
     exp.var <- exp.var[-which(exp.var %in% rep.var)]
   }
