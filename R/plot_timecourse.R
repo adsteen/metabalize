@@ -12,6 +12,7 @@
 ##' @param print.plot CURRENTLY NOT IMPLEMENTED Whether to print the plot to screen. May not work outside of Rstudio
 ##' @param save.plot CURRENTLY NOT IMPLEMENTED Whether to save the plot.
 ##' @param plot.fn CURRENTLY NOT IMPLEMENTED Filename with which to save the plot
+##' @return a ggplot2 object
 ##' @export
 
 plot_timecourse <- function(df, 
@@ -44,10 +45,14 @@ plot_timecourse <- function(df,
   ##########
   # Modify raw dataset per parameters
   ##########
-  
+  browser()
   # Plot only a subset of metabolites
   if(!is.null(metab.subset)) {
     warning("subsetting in plot_timecourse is not yet implemented")
+    ## Gotta do a couple of things:
+    ## Implement switch statement to catch the case where 
+    
+    df.subs <- df[df$compound %in% metab.subset, ]
   }
   
   # Remove "replicate" from exp.var
@@ -75,13 +80,13 @@ plot_timecourse <- function(df,
   if(is.null(color.by)) {
     print("Case 1")  
     p <- ggplot2::ggplot() + 
-      ggplot2::geom_point(data=df, aes_string(x=x.var, y=y.var)) + 
+      ggplot2::geom_point(data=df.subs, aes_string(x=x.var, y=y.var)) + 
       ggplot2::generate_facet_formula(exp.var.short)
   } else {
     #browser()
     print(paste("Case 2: facetting by ", color.by))
     p <- ggplot2::ggplot() + 
-      ggplot2::geom_point(data=df, aes_string(x=x.var, y=y.var, colour=color.by)) + 
+      ggplot2::geom_point(data=df.subs, aes_string(x=x.var, y=y.var, colour=color.by)) + 
       generate_facet_formula(exp.var.short, omit=rep.var)
   }
   
@@ -101,11 +106,8 @@ plot_timecourse <- function(df,
     }
   }
 
-
   # Bring y axis down to zero
   p <- p + ggplot2::expand_limits(y=0)
-  
-
 
   # Return the plot
   p

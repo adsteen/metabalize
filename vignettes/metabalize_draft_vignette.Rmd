@@ -108,9 +108,7 @@ C12_only <- subset(raw_12C, is.12C==TRUE)
 ### Fit exponential models
 Next we want to fit exponential models to the data. Note that the specific exponential model being fit is:
 
-$$
-y = Ae^(kt) + \epsilon
-$$
+$$ y = Ae^(kt) + \epsilon $$
 
 (Hmm, this is not displaying correctly for some reason). 
 
@@ -185,11 +183,27 @@ We'd like to make timecourse plots including fit lines for each compound, treatm
 all_preds <- ldply(nls_fits, safe_NLS_pred, c(0, 125))
 ```
 
-Then we can use the **metabalize** function `plot_timecourse()` to make plots of all of the data
+Then we can use the **metabalize** function `plot_timecourse()` to make plots of all of the data.
 
-```{r}
+```{r, warning=FALSE}
 p_all_timecourse <- plot_timecourse(df=C12_only,
                                     exp.var=exp.var,
                                     exp_pred=all_preds)
 print(p_all_timecourse)
+```
+
+
+This plot is totally unwieldy, because we have too many metabolites to effectively visualize. We could simply save the plot as a large image:
+
+```{r}
+# ggsave("all_metabolite_timecourses.png", height=30, width=20, units="in", dpi=200)
+```
+
+A better option is to narrow our set of metabolites to a relevant subset. For instance, we could use a subset of values
+
+```{r}
+### TESTING subsetting option
+TCA_metab <- C12_only[C12_only$compound %in% TCA, ]
+p_TCA <- plot_timecourse(TCA_metab)
+print(p_TCA)
 ```
