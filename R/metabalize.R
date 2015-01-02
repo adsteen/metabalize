@@ -4,7 +4,8 @@
 ##' 
 ##' See (some vignette) for details 
 ##' 
-##' @docType package
 ##' @name metabalize
+##' @docType package
+##' @import ggplot2 plyr reshape2
 
 NULL
