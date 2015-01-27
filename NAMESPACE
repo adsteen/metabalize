@@ -1,3 +1,5 @@
+import(plyr)
+
 export(read_mz_file)
 export(test_toy_deisotope)
 export(toy_deisotope)
