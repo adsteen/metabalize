@@ -1,4 +1,6 @@
 import(plyr, ggplot2)
+importFrom(reshape2, melt)
+importFrom(xlsx, read.xlsx)
 
 export(read_mz_file)
 export(test_toy_deisotope)
