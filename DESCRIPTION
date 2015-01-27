@@ -3,6 +3,6 @@ Title: WUseful for analyzing stable-isotope flux metabolomics experiments
 Version: 0.1
 Authors@R: "Andrew D. Steen <asteen1@utk.edu> [aut, cre]"
 Description: Useful for analyzing stable-isotope flux metabolomics experiments 
-Depends: R (>= 3.1.1)
-License: MIT
+Depends: R (>= 3.1.1), plyr, ggplot2, reshape2, xlsx
+License: MIT + file LICENSE
 LazyData: true

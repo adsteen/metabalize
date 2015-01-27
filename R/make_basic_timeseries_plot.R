@@ -2,6 +2,11 @@
 ##' 
 ##' Function to make standardized plot of timeseries
 make_basic_timeseries_plot <- function(df, save.plot=TRUE) {
+  ### Fool R CMD check
+  Time <- percent.12C <- Replicate <- NULL
+  rm(list=c("Time", "percent.12C", "Replicate"))
+  
+  
   p <- ggplot(df, aes(x=Time, y=percent.12C, colour=Replicate)) + 
     geom_point() +
     geom_line() +

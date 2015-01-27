@@ -1,6 +1,10 @@
 ##' Identify the 12C peak for a compound and calculate its percentage vs all ions
 ##' 
 calc_12C <- function(raw_m) {
+  ### Fool R CMD check
+  ion.count <- medMz <- sum.ion.count <- NULL
+  rm(list=c("ion.count", "medMz", "sum.ion.count"))
+  
   
   # raw_m is melted raw output - tested with un-key-merged MAVEN output
   # No, wait, I DO have to add the 
