@@ -53,9 +53,9 @@ This should be saved as a .csv file with  column names in the first row and a di
 For reasons I don't fully understand, you must load the `ggplot2`, `plyr`, and `reshape2` packages in order to use this package ()
 
 ```{r}
-library(ggplot2)
-library(plyr)
-library(reshape2)
+#library(ggplot2)
+#library(plyr)
+#library(reshape2)
 #require(devtools)
 #load_all
 library(metabalize)
