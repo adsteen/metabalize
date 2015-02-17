@@ -45,7 +45,7 @@ plot_timecourse <- function(df,
   ##########
   # Modify raw dataset per parameters
   ##########
-  browser()
+  #browser()
   # Plot only a subset of metabolites
   if(!is.null(metab.subset)) {
     warning("subsetting in plot_timecourse is not yet implemented")

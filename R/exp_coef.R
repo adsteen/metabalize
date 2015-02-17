@@ -25,13 +25,18 @@ exp_coef <- function(mod) {
   coefs.vec[5] <- n
   
   # Name the vector
+  # browser()
   rn <- rownames(coefs)
-  coefs.names <- c(paste(rn[1], ".est", sep=""),
-                   paste(rn[2], ".est", sep=""),
-                   paste(rn[1], "std.err", sep=""), 
-                   paste(rn[2], "std.err", sep=""),
-                   "n")
-  names(coefs.vec) <- coefs.names
   
+  
+  # PATCH: If the element ldply comes to is NA, the coef names get messed up - for now I will hard-code them
+#   coefs.names <- c(paste(rn[1], ".est", sep=""),
+#                    paste(rn[2], ".est", sep=""),
+#                    paste(rn[1], "std.err", sep=""), 
+#                    paste(rn[2], "std.err", sep=""),
+#                    "n")
+  coefs.names <- c("A.est", "k.est", "A.std.err", "k.std.err", "n")
+  names(coefs.vec) <- coefs.names
+  #browser()
   coefs.vec
 }
