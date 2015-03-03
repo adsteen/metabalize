@@ -1,0 +1,29 @@
+---
+title: "2015_03_02_draft_vignette"
+author: "Drew"
+date: "March 2, 2015"
+output: html_document
+---
+
+# Introduction
+
+Abigail will supply the text for the introduction. It should include:
+
+* An overview of the flux method
+* How it is used
+* An introduction of the specific challenge this package is meant to address (measuring rate constants for fluxes of metabolites: anything else?)
+
+
+```{r}
+library(ggplot2)
+library(plyr)
+
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
